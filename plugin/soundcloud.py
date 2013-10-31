@@ -1,15 +1,19 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import os
 from client import SoundcloudClient
+from sound_thread import SoundThread
+import time
 
 def play():
-    client = SoundcloudClient()
-    client.upload_tracks()
-    for track in client.get_track():
-        os.system("wget --quiet {} -O - | mplayer2 - > /dev/null".format(track))
-
+    sound_client = SoundcloudClient()
+    sound_client.upload_random_track_portion()
+    thread = SoundThread(sound_client)
+    thread.play()
+    time.sleep(10)
+    thread.next()
+    time.sleep(10)
+    thread.stop()
 
 if __name__ == '__main__':
     play()
