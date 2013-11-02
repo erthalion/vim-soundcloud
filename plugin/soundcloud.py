@@ -3,17 +3,25 @@
 
 from client import SoundcloudClient
 from sound_thread import SoundThread
-import time
+import __builtin__
 
-def play():
+def play(script_path):
     sound_client = SoundcloudClient()
+    thread = SoundThread(sound_client, script_path)
     sound_client.upload_random_track_portion()
-    thread = SoundThread(sound_client)
     thread.play()
-    time.sleep(10)
-    thread.next()
-    time.sleep(10)
-    thread.stop()
+
+    # FIXME: Ugly hack?
+    __builtin__.thread = thread
+
+def next():
+    __builtin__.thread.next()
+
+def stop():
+    __builtin__.thread.stop()
 
 if __name__ == '__main__':
-    play()
+    play("play.sh")
+    import time
+    time.sleep(10)
+    __builtin__.thread.stop()

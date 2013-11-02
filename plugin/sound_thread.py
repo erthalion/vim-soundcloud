@@ -8,16 +8,20 @@ import shlex
 import threading
 
 class SoundThread():
-    def __init__(self, sound_client):
+    def __init__(self, sound_client, script_path):
         self.thread = None
         self.process = None
         self.client = sound_client
         self.play_next_track = True
+        self.script_path = script_path
 
     def thread_function(self, callback, track):
-        popen_args = shlex.split("/bin/sh play.sh {track}".format(track=track))
-        self.process = subprocess.Popen(popen_args, preexec_fn=os.setsid)
-        self.process.wait()
+        popen_args = shlex.split("/bin/sh {script} {track}".format(script=self.script_path, track=track))
+        self.process = subprocess.Popen(popen_args,
+                preexec_fn=os.setsid,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE)
+        self.process.communicate()[0]
 
         if self.play_next_track:
             callback()

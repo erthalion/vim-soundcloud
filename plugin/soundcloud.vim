@@ -3,39 +3,66 @@ if !has('python')
     finish
 endif
 
-if exists('g:vim_reddit_module')
+if exists('g:vim_soundcloud_module')
     finish
 endif
-let g:vim_reddit_module = 1
+let g:vim_soundcloud_module = 1
 
-if !exists('g:vim_reddit_root') || g:vim_reddit_root == ''
-    let g:vim_reddit_root = expand("<sfile>:p:h")
+if !exists('g:vim_soundcloud_root') || g:vim_soundcloud_root == ''
+    let g:vim_soundcloud_root = expand("<sfile>:p:h")
 endif
 
-if !exists('g:vim_reddit_config') || g:vim_reddit_config == ''
-    let g:vim_reddit_config = g:vim_reddit_root."/default.json"
+if !exists('g:vim_soundcloud_config') || g:vim_soundcloud_config == ''
+    let g:vim_soundcloud_config = g:vim_soundcloud_root."/default.json"
 endif
 
 
 python << EOF
 import sys, vim
-sys.path.append(vim.eval("g:vim_reddit_root"))
+sys.path.append(vim.eval("g:vim_soundcloud_root"))
 EOF
 
-function! Reddit()
+function! SoundPlay()
 
 python << EOF
 
-from reddit import main
-main()
+script_path = vim.eval("g:vim_soundcloud_root") + "/" + "play.sh"
+
+from soundcloud import play
+play(script_path)
 
 EOF
-setlocal nomodifiable
-setlocal buftype=nofile
-set ft=reddit
-execute ":f Reddit"
 endfunction
 
-if !exists(":Reddit")
-    command Reddit :call Reddit()
+function! NextTrack()
+
+python << EOF
+
+from soundcloud import next
+next()
+
+EOF
+endfunction
+
+function! StopPlay()
+
+python << EOF
+
+from soundcloud import stop
+stop()
+
+EOF
+endfunction
+
+
+if !exists(":SoundPlay")
+    command SoundPlay :call SoundPlay()
 endif
+if !exists(":NextTrack")
+    command NextTrack :call NextTrack()
+endif
+if !exists(":Stop")
+    command StopPlay :call StopPlay()
+endif
+
+autocmd VimLeave * :call StopPlay()
