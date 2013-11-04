@@ -40,3 +40,12 @@ class SoundThread():
     def stop(self):
         self.play_next_track = False
         os.killpg(self.process.pid, signal.SIGTERM)
+
+    def get_info(self):
+        return self.client.get_info()
+
+    def is_playing(self):
+        return self.thread.is_alive()
+
+    def set_genres(self, genres):
+        self.client.set_genres(genres)

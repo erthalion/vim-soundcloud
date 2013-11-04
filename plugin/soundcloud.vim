@@ -54,6 +54,30 @@ stop()
 EOF
 endfunction
 
+function! GetInfo()
+
+python << EOF
+
+from soundcloud import get_info
+get_info()
+
+EOF
+endfunction
+
+function! SetGenres(genres)
+
+python << EOF
+
+from soundcloud import get_info
+genres = vim.eval("a:genres")
+set_genres(genres)
+
+EOF
+    echo a:genres
+
+endfunction
+
+
 
 if !exists(":SoundPlay")
     command SoundPlay :call SoundPlay()
@@ -63,6 +87,14 @@ if !exists(":NextTrack")
 endif
 if !exists(":Stop")
     command StopPlay :call StopPlay()
+endif
+
+if !exists(":GetInfo")
+    command GetInfo :call GetInfo()
+endif
+
+if !exists(":SetGenres")
+    command -nargs=* SetGenres :call SetGenres(<f-args>)
 endif
 
 autocmd VimLeave * :call StopPlay()

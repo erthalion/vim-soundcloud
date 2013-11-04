@@ -8,10 +8,6 @@ import simplejson
 TIMEOUT = 20
 
 class SoundcloudClient():
-    """
-    https://api.soundcloud.com/tracks.json?genres=metall,post+rock&client_id=8c2772150284a782b5009d77535dd1e5
-    https://api.soundcloud.com/tracks/{track_id}/stream?client_id=8c2772150284a782b5009d77535dd1e5
-    """
     def __init__(self, random=True):
         self.genres = ["metall", "post rock",]
         self.genres = [g.replace(" ", "+") for g in self.genres]
@@ -36,13 +32,16 @@ class SoundcloudClient():
 
     def get_info(self):
         """ Get dictionary, that contains info about current track:
-                :name
-                :author
+                :title
                 :genre
-                :description
-                :tags
+                :url
         """
-        pass
+        track = self.tracks[self.current_track_index]
+        return {
+                "title": track.get("title", "No title"),
+                "genre": track.get("genre", "No genre"),
+                "url": track.get("permalink_url", "No url"),
+                }
 
     def upload_track_portion(self, offset=None, limit=None):
         """ Set first track as current
