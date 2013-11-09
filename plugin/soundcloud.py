@@ -1,19 +1,17 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from client import SoundcloudClient
 from sound_thread import SoundThread
 import __builtin__ as builtin
 
 def play(script_path):
     if not hasattr(builtin, "thread"):
-        sound_client = SoundcloudClient()
-        thread = SoundThread(sound_client, script_path)
-        sound_client.upload_random_track_portion()
-    thread.play()
+        thread = SoundThread(script_path)
 
-    # FIXME: Ugly hack?
-    builtin.thread = thread
+        # FIXME: Ugly hack?
+        builtin.thread = thread
+
+    builtin.thread.play()
 
 def next():
     if hasattr(builtin, "thread"):
@@ -35,9 +33,9 @@ def get_info():
     else:
         print "There are no tracks"
 
-def set_genres(genres):
+def set_genres(*args):
     if hasattr(builtin, "thread"):
-        builtin.thread.set_genres(genres)
+        builtin.thread.set_genres(*args)
     else:
         print "There are no tracks"
 

@@ -6,12 +6,15 @@ import signal
 import subprocess
 import shlex
 import threading
+from client import SoundcloudClient
 
 class SoundThread():
-    def __init__(self, sound_client, script_path):
+    def __init__(self, script_path):
         self.thread = None
         self.process = None
-        self.client = sound_client
+        self.client = SoundcloudClient()
+        self.client.upload_random_track_portion()
+
         self.play_next_track = True
         self.script_path = script_path
 
@@ -47,5 +50,6 @@ class SoundThread():
     def is_playing(self):
         return self.thread.is_alive()
 
-    def set_genres(self, genres):
-        self.client.set_genres(genres)
+    def set_genres(self, *args):
+        self.client.set_genres(*args)
+        self.client.upload_random_track_portion()

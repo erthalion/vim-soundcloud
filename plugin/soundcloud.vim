@@ -64,16 +64,15 @@ get_info()
 EOF
 endfunction
 
-function! SetGenres(genres)
+function! SetGenres(...)
 
 python << EOF
 
-from soundcloud import get_info
-genres = vim.eval("a:genres")
+from soundcloud import set_genres
+genres = vim.eval("a:000")
 set_genres(genres)
 
 EOF
-    echo a:genres
 
 endfunction
 
@@ -94,7 +93,7 @@ if !exists(":GetInfo")
 endif
 
 if !exists(":SetGenres")
-    command -nargs=* SetGenres :call SetGenres(<f-args>)
+    command -nargs=* SetGenres call SetGenres(<f-args>)
 endif
 
 autocmd VimLeave * :call StopPlay()

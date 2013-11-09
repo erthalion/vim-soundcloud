@@ -27,8 +27,8 @@ class SoundcloudClient():
         self.portion_size = 100
         self.portion_index = 0
 
-    def set_genres(self, genres):
-        self.genres=genres
+    def set_genres(self, *args):
+        self.genres = list(args)
 
     def get_info(self):
         """ Get dictionary, that contains info about current track:
